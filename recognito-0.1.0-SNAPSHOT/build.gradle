@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('recognito-0.1.0-SNAPSHOT.jar'))
