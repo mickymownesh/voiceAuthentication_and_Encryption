@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/android-udp-audio-chat-master.iml" filepath="$PROJECT_DIR$/.idea/modules/android-udp-audio-chat-master.iml" group="android-udp-audio-chat-master" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="android-udp-audio-chat-master/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="voiceAuthentication_and_Encryption-master/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/recognito-0.1.0-SNAPSHOT/recognito-0.1.0-SNAPSHOT.iml" filepath="$PROJECT_DIR$/.idea/modules/recognito-0.1.0-SNAPSHOT/recognito-0.1.0-SNAPSHOT.iml" group="voiceAuthentication_and_Encryption-master/recognito-0.1.0-SNAPSHOT" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/voiceAuthentication_and_Encryption-master.iml" filepath="$PROJECT_DIR$/.idea/voiceAuthentication_and_Encryption-master.iml" group="voiceAuthentication_and_Encryption-master" />
     </modules>
   </component>
 </project>
