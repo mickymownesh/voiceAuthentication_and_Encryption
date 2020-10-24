@@ -1,4 +1,4 @@
-package hw.dt83.udpchat;
+package com.application.callAuth;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

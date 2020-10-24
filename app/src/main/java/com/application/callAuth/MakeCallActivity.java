@@ -1,10 +1,11 @@
-package hw.dt83.udpchat;
+package com.application.callAuth;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 import android.app.Activity;
@@ -17,13 +18,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class ReceiveCallActivity extends Activity {
+public class MakeCallActivity extends Activity {
 
-	private static final String LOG_TAG = "ReceiveCall";
+	private static final String LOG_TAG = "MakeCall";
 	private static final int BROADCAST_PORT = 50002;
 	private static final int BUF_SIZE = 1024;
-	private String contactIp;
+	private String displayName;
 	private String contactName;
+	private String contactIp;
 	private boolean LISTEN = true;
 	private boolean IN_CALL = false;
 	private AudioCall call;
@@ -32,91 +34,51 @@ public class ReceiveCallActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_receive_call);
+		setContentView(R.layout.activity_make_call);
+		
+		Log.i(LOG_TAG, "MakeCallActivity started!");
 		
 		Intent intent = getIntent();
+		displayName = intent.getStringExtra(MainActivity.EXTRA_DISPLAYNAME);
 		contactName = intent.getStringExtra(MainActivity.EXTRA_CONTACT);
 		contactIp = intent.getStringExtra(MainActivity.EXTRA_IP);
 		
-		TextView textView = (TextView) findViewById(R.id.textViewIncomingCall);
-		textView.setText("Incoming call: " + contactName);
-		
-		final Button endButton = (Button) findViewById(R.id.buttonEndCall1);
-		endButton.setVisibility(View.INVISIBLE);
+		TextView textView = (TextView) findViewById(R.id.textViewCalling);
+		textView.setText("Calling: " + contactName);
 		
 		startListener();
+		makeCall();
 		
-		// ACCEPT BUTTON
-		Button acceptButton = (Button) findViewById(R.id.buttonAccept);
-		acceptButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				
-				try {
-					// Accepting call. Send a notification and start the call
-					sendMessage("ACC:");
-					InetAddress address = InetAddress.getByName(contactIp);
-					Log.i(LOG_TAG, "Calling " + address.toString());
-					IN_CALL = true;
-					call = new AudioCall(address);
-					call.startCall();
-					// Hide the buttons as they're not longer required
-					Button accept = (Button) findViewById(R.id.buttonAccept);
-					accept.setEnabled(false);
-					
-					Button reject = (Button) findViewById(R.id.buttonReject);
-					reject.setEnabled(false);
-					
-					endButton.setVisibility(View.VISIBLE);
-				}
-				catch(UnknownHostException e) {
-					
-					Log.e(LOG_TAG, "UnknownHostException in acceptButton: " + e);
-				}
-				catch(Exception e) {
-					
-					Log.e(LOG_TAG, "Exception in acceptButton: " + e);
-				}
-			}
-		});
-		
-		// REJECT BUTTON
-		Button rejectButton = (Button) findViewById(R.id.buttonReject);
-		rejectButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// Send a reject notification and end the call
-				sendMessage("REJ:");
-				endCall();
-			}
-		});
-		
-		// END BUTTON
+		Button endButton = (Button) findViewById(R.id.buttonEndCall);
 		endButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				
+				// Button to end the call has been pressed
 				endCall();
 			}
 		});
 	}
+
+	
+	private void makeCall() {
+		// Send a request to start a call
+		sendMessage("CAL:"+displayName, 50003);
+	}
 	
 	private void endCall() {
-		// End the call and send a notification
+		// Ends the chat sessions
 		stopListener();
 		if(IN_CALL) {
 			
 			call.endCall();
 		}
-		sendMessage("END:");
+		sendMessage("END:", BROADCAST_PORT);
 		finish();
 	}
 	
 	private void startListener() {
-		// Creates the listener thread
+		// Create listener thread
 		LISTEN = true;
 		Thread listenThread = new Thread(new Runnable() {
 			
@@ -127,7 +89,7 @@ public class ReceiveCallActivity extends Activity {
 					
 					Log.i(LOG_TAG, "Listener started!");
 					DatagramSocket socket = new DatagramSocket(BROADCAST_PORT);
-					socket.setSoTimeout(1500);
+					socket.setSoTimeout(15000);
 					byte[] buffer = new byte[BUF_SIZE];
 					DatagramPacket packet = new DatagramPacket(buffer, BUF_SIZE);
 					while(LISTEN) {
@@ -139,18 +101,35 @@ public class ReceiveCallActivity extends Activity {
 							String data = new String(buffer, 0, packet.getLength());
 							Log.i(LOG_TAG, "Packet received from "+ packet.getAddress() +" with contents: " + data);
 							String action = data.substring(0, 4);
-							if(action.equals("END:")) {
+							if(action.equals("ACC:")) {
+								// Accept notification received. Start call
+								call = new AudioCall(packet.getAddress());
+								call.startCall();
+								IN_CALL = true;
+							}
+							else if(action.equals("REJ:")) {
+								// Reject notification received. End call
+								endCall();
+							}
+							else if(action.equals("END:")) {
 								// End call notification received. End call
 								endCall();
 							}
 							else {
-								// Invalid notification received.
+								// Invalid notification received
 								Log.w(LOG_TAG, packet.getAddress() + " sent invalid message: " + data);
+							}
+						}
+						catch(SocketTimeoutException e) {
+							if(!IN_CALL) {
+								
+								Log.i(LOG_TAG, "No reply from contact. Ending call");
+								endCall();
+								return;
 							}
 						}
 						catch(IOException e) {
 							
-							Log.e(LOG_TAG, "IOException in Listener " + e);
 						}
 					}
 					Log.i(LOG_TAG, "Listener ending");
@@ -160,7 +139,7 @@ public class ReceiveCallActivity extends Activity {
 				}
 				catch(SocketException e) {
 					
-					Log.e(LOG_TAG, "SocketException in Listener " + e);
+					Log.e(LOG_TAG, "SocketException in Listener");
 					endCall();
 				}
 			}
@@ -173,8 +152,8 @@ public class ReceiveCallActivity extends Activity {
 		LISTEN = false;
 	}
 	
-	private void sendMessage(final String message) {
-		// Creates a thread for sending notifications
+	private void sendMessage(final String message, final int port) {
+		// Creates a thread used for sending notifications
 		Thread replyThread = new Thread(new Runnable() {
 			
 			@Override
@@ -185,7 +164,7 @@ public class ReceiveCallActivity extends Activity {
 					InetAddress address = InetAddress.getByName(contactIp);
 					byte[] data = message.getBytes();
 					DatagramSocket socket = new DatagramSocket();
-					DatagramPacket packet = new DatagramPacket(data, data.length, address, BROADCAST_PORT);
+					DatagramPacket packet = new DatagramPacket(data, data.length, address, port);
 					socket.send(packet);
 					Log.i(LOG_TAG, "Sent message( " + message + " ) to " + contactIp);
 					socket.disconnect();
@@ -207,11 +186,11 @@ public class ReceiveCallActivity extends Activity {
 		});
 		replyThread.start();
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.receive_call, menu);
+		getMenuInflater().inflate(R.menu.make_call, menu);
 		return true;
 	}
 

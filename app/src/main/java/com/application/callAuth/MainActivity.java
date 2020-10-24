@@ -1,4 +1,4 @@
-package hw.dt83.udpchat;
+package com.application.callAuth;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -7,6 +7,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -159,7 +160,7 @@ public class MainActivity extends Activity {
 		// Function to return the broadcast address, based on the IP address of the device
 		try {
 			
-			WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
+			@SuppressLint("WifiManagerLeak") WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
 			WifiInfo wifiInfo = wifiManager.getConnectionInfo();
 			int ipAddress = wifiInfo.getIpAddress();
 			String addressString = toBroadcastIp(ipAddress);
