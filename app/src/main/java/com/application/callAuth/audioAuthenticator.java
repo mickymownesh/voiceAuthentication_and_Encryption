@@ -1,7 +1,6 @@
-package hw.dt83.udpchat;
+package com.application.callAuth;
 
 import com.bitsinharmony.recognito.Recognito;
-import com.bitsinharmony.recognito.VoicePrint;
 
 public class audioAuthenticator {
 
