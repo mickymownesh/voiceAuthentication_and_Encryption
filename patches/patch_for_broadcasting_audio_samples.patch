@@ -1,0 +1,12 @@
+Index: app/src/main/java/hw/dt83/udpchat/audioBroadcater.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/hw/dt83/udpchat/audioBroadcater.java	(date 1603465268530)
++++ app/src/main/java/hw/dt83/udpchat/audioBroadcater.java	(date 1603465268530)
+@@ -0,0 +1,4 @@
++package hw.dt83.udpchat;
++
++public class audioBroadcater {
++}
