@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 17
+    compileSdkVersion 26
     buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "hw.dt83.udpchat"
-        minSdkVersion 10
-        targetSdkVersion 17
+        minSdkVersion 16
+        targetSdkVersion 26
     }
 
     buildTypes {
@@ -19,5 +19,6 @@ android {
 }
 
 dependencies {
+    implementation project(path: ':recognito-0.1.0-SNAPSHOT')
     compile 'com.android.support:support-v4:18.0.0'
 }

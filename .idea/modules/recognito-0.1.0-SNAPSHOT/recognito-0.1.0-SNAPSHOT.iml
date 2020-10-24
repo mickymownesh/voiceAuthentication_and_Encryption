@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id=":recognito-0.1.0-SNAPSHOT" external.linked.project.path="$MODULE_DIR$/../../../recognito-0.1.0-SNAPSHOT" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="voiceAuthentication_and_Encryption-master" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+<module external.linked.project.id=":recognito-0.1.0-SNAPSHOT" external.linked.project.path="$MODULE_DIR$/../../../recognito-0.1.0-SNAPSHOT" external.root.project.path="$MODULE_DIR$/../../.." external.system.id="GRADLE" external.system.module.group="project" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
@@ -15,7 +15,7 @@
       </configuration>
     </facet>
   </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_6" inherit-compiler-output="true">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../recognito-0.1.0-SNAPSHOT">
       <excludeFolder url="file://$MODULE_DIR$/../../../recognito-0.1.0-SNAPSHOT/.gradle" />
