@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
@@ -21,4 +22,5 @@ android {
 dependencies {
     implementation project(path: ':recognito-0.1.0-SNAPSHOT')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'com.google.firebase:firebase-database:19.5.0'
 }
