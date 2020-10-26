@@ -22,6 +22,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Locale;
 
+
 public class AudioSaverWAV {
 
 
@@ -153,6 +154,18 @@ class RecordWave {
         } catch (IOException e) {
 
             e.printStackTrace();
+        }
+
+    }
+
+    public static void closeWav(){
+
+        if(wavOut != null){
+            try{
+                wavOut.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
         }
 
     }
