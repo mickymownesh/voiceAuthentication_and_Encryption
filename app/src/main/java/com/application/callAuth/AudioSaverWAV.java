@@ -1,26 +1,18 @@
 package com.application.callAuth;
 
 import android.media.AudioFormat;
-import android.media.AudioRecord;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.util.Log;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.Locale;
 
 
 public class AudioSaverWAV {
@@ -50,31 +42,51 @@ class RecordWave {
     private static final int ENCODING = AudioFormat.ENCODING_PCM_16BIT;
     private static final int CHANNEL_MASK = AudioFormat.CHANNEL_IN_MONO;
     static  FileOutputStream wavOut = null;
+    static File f;
 
-    public static void CreateWav(File... files){
+    static int totalByte = 0;
+    static int flag = 0;
+    static byte[] audioBuff;
 
+    static FileOutputStream outfile;
+    static File audioFileWav;
+
+    public static void CreateWav(File f){
+
+        audioFileWav = f;
         try {
-            wavOut = new FileOutputStream(files[0]);
-            //method to fill the wav formate header
-            writeWavHeader(wavOut,CHANNEL_MASK,SAMPLE_RATE,ENCODING);
-
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            outfile = new FileOutputStream(f);
+            writeWavHeader(outfile,CHANNEL_MASK,SAMPLE_RATE,ENCODING);
+        } catch (FileNotFoundException ex) {
+          Log.i(LOG_TAG,"File not found");
         } catch (IOException e) {
-            e.printStackTrace();
-
+            Log.i(LOG_TAG,"Error in write wave header method");
         }
-        if(wavOut != null){
-            try{
-                wavOut.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
 
     }
+
+    static void Write(byte[] buff,int i){
+
+        try {
+            outfile.write(buff, 0, i);
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
+        Log.i(LOG_TAG,"Length of the file" + audioFileWav.length());
+
+    }
+
+    public static void updateHeader(){
+
+        try {
+            updateWavHeader(audioFileWav);
+            Log.i(LOG_TAG,"Final wav file size = "+audioFileWav.length());
+            fireBaseSupport.uploadAudio(audioFileWav);
+        } catch (IOException e) {
+            Log.i(LOG_TAG,"error in update header method");
+        }
+    }
+
 
     //first wavheader method to decide the values
 
@@ -148,13 +160,19 @@ class RecordWave {
 
     public static void fillWav(byte[] buff,int bytesRead){
 
+
         try {
-            wavOut.write(buff,0,bytesRead);
-
+            wavOut.getFD();
+            byte[] buf = new byte[400];
+            wavOut.write(buf);
+            //wavOut.write(buff,0,900);
+           // wavOut.write(buff,0,bytesRead);
         } catch (IOException e) {
-
-            e.printStackTrace();
+            Log.i(LOG_TAG,"error in writting to the wavOut file");
         }
+        totalByte = totalByte+bytesRead;
+
+        int i = Log.i(LOG_TAG, "file bytes size : ");
 
     }
 
@@ -163,6 +181,7 @@ class RecordWave {
         if(wavOut != null){
             try{
                 wavOut.close();
+
             }catch (IOException e){
                 e.printStackTrace();
             }

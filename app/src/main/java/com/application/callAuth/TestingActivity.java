@@ -2,39 +2,58 @@ package com.application.callAuth;
 
 
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
+import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.List;
+
+
+import com.bitsinharmony.recognito.MatchResult;
+import com.bitsinharmony.recognito.Recognito;
+import com.bitsinharmony.recognito.VoicePrint;
+
+import androidx.core.app.ActivityCompat;
 
 public class TestingActivity extends Activity {
 
-    private Button Recordbtn, Sendbtn;
+    private Button Recordbtn, Sendbtn , downbtn,testbtn;
 
 
-    private static final String LOG_TAG = "AudioCall";
+    private static final String LOG_TAG = "TestingActivity";
     private static final int SAMPLE_RATE = 8000; // Hertz
     private static final int SAMPLE_INTERVAL = 20; // Milliseconds
     private static final int SAMPLE_SIZE = 2; // Bytes
     private static final int BUF_SIZE = SAMPLE_INTERVAL * SAMPLE_INTERVAL * SAMPLE_SIZE * 2; //Bytes
     private InetAddress address; // Address to call
     private int port = 50000; // Port the packets are addressed to
-    private boolean mic = false; // Enable mic?
+    private static boolean mic = false; // Enable mic?
     private boolean speakers = false; // Enable speakers?
+    MediaPlayer mp ;
 
-    File waveFile;
+
+    static File waveFile;
+    static File downloadAudio;
+    static File checkAudio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +62,15 @@ public class TestingActivity extends Activity {
 
         Recordbtn = (Button)findViewById(R.id.TestRecordbtn);
         Sendbtn = (Button)findViewById(R.id.testSendbtn);
+        downbtn = (Button) findViewById(R.id.downloadAudio);
+        testbtn = (Button) findViewById(R.id.testbtn);
+
+        checkRecordPermission();
+        checkInternetPermission();
+        checkStoragePermission();
+
+        downloadAudio = new File(getFilesDir(),"DownloadAudio"+".wav");
+        checkAudio = new File(getFilesDir(),"CheckAudio"+".wav");
 
         Recordbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,19 +78,147 @@ public class TestingActivity extends Activity {
                 waveFile = new File(getFilesDir(),"firstTestRecording"+".wav");
                 RecordWave.CreateWav(waveFile);
                 startMic();
+               // startMic();
 
+            }
+        });
+
+        testbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playAudio();
             }
         });
 
         Sendbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                byte[] buff = new byte[BUF_SIZE];
+                //int i = 800;
+                //RecordWave.Write(buff);
                 muteMic();
-                
-
+                //RecordWave.fillWav(buff,i);
+               // muteMic();
+                Toast.makeText(getApplicationContext(),"Stopping mic and uploading data",Toast.LENGTH_LONG).show();
+                //fireBaseSupport obj = new fireBaseSupport(waveFile);
+              //  fireBaseSupport.uploadAudio(waveFile);
             }
         });
+
+        downbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FileInputStream fin = null;
+                FileOutputStream fout = null;
+                int b;
+               fireBaseSupport.downloadAudio(downloadAudio);
+/*
+                try {
+                    fin = new FileInputStream(temp);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    fout = new FileOutputStream(downloadAudio);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                try{
+
+                    while ((b = fin.read()) != -1){
+                        fout.write(b);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                   Log.i(LOG_TAG,"File sizes not matched in testing activity: "+downloadAudio.length());
+                   Log.i(LOG_TAG,"file location : "+downloadAudio.getPath());
+                   Log.i(LOG_TAG,"is executable : "+ downloadAudio.canExecute());
+                // calltest();*/
+            }
+        });
+
+
+
+    }
+
+    public void recognitoTest(){
+
+       /* Recognito<String> recognito = new Recognito<>(8000);
+        VoicePrint print= null;
+        MatchResult<String> match = null;
+        try {
+            print = recognito.createVoicePrint("mownesh",downloadAudio);
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.i(LOG_TAG,"excepyion in recognito print");
+        }
+
+        try {
+            List<MatchResult<String>> matches = recognito.identify(downloadAudio);
+            match = matches.get(0);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.i(LOG_TAG,"error in matching the audio samples");
+
+        }
+        if(match.getKey().equals("mownesh")){
+            Log.i(LOG_TAG,"Match is perfect matched the audio signals");
+        }
+        else{
+            Log.i(LOG_TAG,"Match is imperfect");
+        } */
+    }
+
+
+
+    public void calltest(){
+        MediaPlayer mp = new MediaPlayer();
+        try {
+            FileOutputStream player = new FileOutputStream(downloadAudio);
+            mp.setDataSource(player.getFD());
+            mp.prepare();
+        } catch (IOException e) {
+            Log.i(LOG_TAG,"Error in playing the audio : "+e);
+        }
+        mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.start();
+            }
+        });
+
+    }
+
+    private void checkRecordPermission() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO},
+                    123);
+        }
+    }
+
+    private void checkStoragePermission() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    123);
+        }
+    }
+    private void checkInternetPermission() {
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET},
+                    123);
+        }
     }
 
     public void muteMic() {
@@ -70,7 +226,7 @@ public class TestingActivity extends Activity {
         mic = false;
     }
 
-    public void startMic() {
+    public static void startMic() {
         // Creates the thread for capturing and transmitting audio
         mic = true;
         Thread thread = new Thread(new Runnable() {
@@ -91,19 +247,22 @@ public class TestingActivity extends Activity {
                     while(mic) {
                         // Capture audio from the mic and transmit it
                         bytes_read = audioRecorder.read(buf, 0, BUF_SIZE);
-                        RecordWave.fillWav(buf,bytes_read);
+                        RecordWave.Write(buf,bytes_read);
                         Thread.sleep(SAMPLE_INTERVAL, 0);
                     }
                     // Stop recording and release resources
+                    Log.i(LOG_TAG,"buff size : "+buf.length);
                     audioRecorder.stop();
                     audioRecorder.release();
+                    RecordWave.updateHeader();
                     //closing the wav file
-                    RecordWave.closeWav();
-                    RecordWave.updateWavHeader(waveFile);
+                    //RecordWave.closeWav();
+                   // RecordWave.updateWavHeader(waveFile);
+                    Log.i(LOG_TAG,"wavefile size : "+waveFile.length());
                     mic = false;
                     return;
                 }
-                catch(InterruptedException | IOException e) {
+                catch(InterruptedException e) {
 
                     Log.e(LOG_TAG, "InterruptedException: " + e.toString());
                     mic = false;
@@ -111,6 +270,10 @@ public class TestingActivity extends Activity {
             }
         });
         thread.start();
+    }
+
+    public void playAudio(){
+       Log.i(LOG_TAG,downloadAudio.getPath());
     }
 
 }

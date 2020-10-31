@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
 
 		//initiating the Database
 
-		fireBaseSupport obj = new fireBaseSupport();
+		//fireBaseSupport obj = new fireBaseSupport();
 
 		btnStart.setOnClickListener(new OnClickListener() {
 			
