@@ -22,6 +22,7 @@ import AlizeSpkRec.AlizeException;
 import AlizeSpkRec.IdAlreadyExistsException;
 import AlizeSpkRec.SimpleSpkDetSystem;
 import AlizeSpkRec.SimpleSpkDetSystem.SpkRecResult;
+import java.io.File;
 
 
 
@@ -80,6 +81,7 @@ public class AuthenticatorTesting extends Activity {
             public void onClick(View v) {
                 AlizeInit(getApplicationContext());
                 addSpeakersTest();
+                //...
             }
         });
 
