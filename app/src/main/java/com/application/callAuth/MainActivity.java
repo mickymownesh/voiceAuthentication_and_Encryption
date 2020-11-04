@@ -52,6 +52,11 @@ public class MainActivity extends Activity {
 		// START BUTTON
 		// Pressing this buttons initiates the main functionality
 		final Button btnStart = (Button) findViewById(R.id.buttonStart);
+
+		//initiating the Database
+
+		//fireBaseSupport obj = new fireBaseSupport();
+
 		btnStart.setOnClickListener(new OnClickListener() {
 			
 			@Override

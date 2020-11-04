@@ -1,2 +1,3 @@
+include ':authenticator'
 include ':recognito-0.1.0-SNAPSHOT'
 include ':app'
