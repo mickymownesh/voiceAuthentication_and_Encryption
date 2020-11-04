@@ -4,10 +4,11 @@ apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
+    ndkVersion "21.0.6113669"
 
     defaultConfig {
         applicationId "hw.dt83.udpchat"
-        minSdkVersion 16
+        minSdkVersion 22
         targetSdkVersion 30
     }
 
@@ -20,6 +21,7 @@ android {
 }
 
 dependencies {
+    implementation project(':authenticator')
     implementation project(path: ':recognito-0.1.0-SNAPSHOT')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.firebase:firebase-database:19.5.0'
@@ -27,4 +29,6 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
     implementation platform('com.google.firebase:firebase-bom:25.12.0')
     implementation 'com.google.firebase:firebase-storage'
+
+    implementation files('libs/alize.aar')
 }

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" group="project/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/authenticator/authenticator.iml" filepath="$PROJECT_DIR$/.idea/modules/authenticator/authenticator.iml" group="project/authenticator" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/project.iml" filepath="$PROJECT_DIR$/.idea/modules/project.iml" group="project" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/recognito-0.1.0-SNAPSHOT/recognito-0.1.0-SNAPSHOT.iml" filepath="$PROJECT_DIR$/.idea/modules/recognito-0.1.0-SNAPSHOT/recognito-0.1.0-SNAPSHOT.iml" group="project/recognito-0.1.0-SNAPSHOT" />
     </modules>

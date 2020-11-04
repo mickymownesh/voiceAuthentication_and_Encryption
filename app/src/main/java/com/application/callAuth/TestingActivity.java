@@ -40,7 +40,7 @@ public class TestingActivity extends Activity {
 
 
     private static final String LOG_TAG = "TestingActivity";
-    private static final int SAMPLE_RATE = 8000; // Hertz
+    private static final int SAMPLE_RATE = 16000; // Hertz
     private static final int SAMPLE_INTERVAL = 20; // Milliseconds
     private static final int SAMPLE_SIZE = 2; // Bytes
     private static final int BUF_SIZE = SAMPLE_INTERVAL * SAMPLE_INTERVAL * SAMPLE_SIZE * 2; //Bytes
@@ -86,7 +86,7 @@ public class TestingActivity extends Activity {
         testbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playAudio();
+              //  audioAuthenticator.recognitoTest(downloadAudio);
             }
         });
 
@@ -142,37 +142,6 @@ public class TestingActivity extends Activity {
 
 
     }
-
-    public void recognitoTest(){
-
-       /* Recognito<String> recognito = new Recognito<>(8000);
-        VoicePrint print= null;
-        MatchResult<String> match = null;
-        try {
-            print = recognito.createVoicePrint("mownesh",downloadAudio);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.i(LOG_TAG,"excepyion in recognito print");
-        }
-
-        try {
-            List<MatchResult<String>> matches = recognito.identify(downloadAudio);
-            match = matches.get(0);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.i(LOG_TAG,"error in matching the audio samples");
-
-        }
-        if(match.getKey().equals("mownesh")){
-            Log.i(LOG_TAG,"Match is perfect matched the audio signals");
-        }
-        else{
-            Log.i(LOG_TAG,"Match is imperfect");
-        } */
-    }
-
-
 
     public void calltest(){
         MediaPlayer mp = new MediaPlayer();

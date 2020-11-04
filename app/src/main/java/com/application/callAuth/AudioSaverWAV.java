@@ -31,7 +31,7 @@ public class AudioSaverWAV {
 class RecordWave {
 
     private static final String LOG_TAG = "AudioRecordwaveFormat";
-    private static final int SAMPLE_RATE = 8000; // Hertz    --> verified sample rate
+    private static final int SAMPLE_RATE = 16000; // Hertz    --> verified sample rate
     private static final int SAMPLE_INTERVAL = 20; // Milliseconds
     private static final int SAMPLE_SIZE = 2; // Bytes
     private static final int BUF_SIZE = SAMPLE_INTERVAL * SAMPLE_INTERVAL * SAMPLE_SIZE * 2; //Bytes
