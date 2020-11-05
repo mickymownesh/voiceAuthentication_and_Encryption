@@ -127,7 +127,7 @@ public class AudioCall {
 				public void run() {
 					// Create an instance of AudioTrack, used for playing back audio
 					Log.i(LOG_TAG, "Receive thread started. Thread id: " + Thread.currentThread().getId());
-					AudioTrack track = new AudioTrack(AudioManager.STREAM_MUSIC, SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
+					AudioTrack track = new AudioTrack(AudioManager.STREAM_VOICE_CALL, SAMPLE_RATE, AudioFormat.CHANNEL_OUT_MONO,
 							AudioFormat.ENCODING_PCM_16BIT, BUF_SIZE, AudioTrack.MODE_STREAM);
 					track.play();
 					try {

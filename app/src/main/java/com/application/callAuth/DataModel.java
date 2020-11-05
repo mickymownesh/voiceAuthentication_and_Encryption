@@ -5,9 +5,10 @@ import java.io.File;
 public class DataModel {
 
     private File audio;
+    private static boolean verification = false;
 
-    DataModel(File audio){
-        this.audio = audio;
+    DataModel(){
+
     }
 
     public void getAudio(File aud) {
@@ -16,5 +17,13 @@ public class DataModel {
 
     public File seFile(){
         return audio;
+    }
+
+    public void setVerification(boolean v){
+        this.verification = v;
+    }
+
+    public boolean getVerification(){
+        return verification;
     }
 }
