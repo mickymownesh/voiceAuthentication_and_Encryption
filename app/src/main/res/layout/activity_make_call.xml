@@ -14,14 +14,28 @@
         android:id="@+id/textViewCalling"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         android:layout_gravity="center_horizontal"
         android:text="@string/calling"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/mutalAuthTxt"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Waiting for mutual authentication"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+        android:layout_gravity="center"
+        android:background="@drawable/custombtn1"
         android:gravity="center_horizontal" >
 
         <Button

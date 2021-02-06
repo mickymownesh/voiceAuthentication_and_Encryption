@@ -33,7 +33,7 @@ public class RegisterActivity extends Activity {
 
     TextView registerText,micIcon,micOff,instructions,fillSpeach;
     EditText userID;
-    Button login ,register,complete;
+    Button login ,register,complete , remove;
     LinearLayout micLayout;
     Intent nextActivity;
 
@@ -57,6 +57,12 @@ public class RegisterActivity extends Activity {
         instructions = (TextView)findViewById(R.id.SpeaktheF);
         fillSpeach = (TextView)findViewById(R.id.FillSpeech);
         complete = (Button)findViewById(R.id.CompleteRegistration);
+        remove = (Button)findViewById(R.id.RemoveUser);
+
+
+        //turning off the stop recording button
+
+        micOff.setEnabled(false);
 
         //getting user permissions
 
@@ -68,6 +74,8 @@ public class RegisterActivity extends Activity {
         identifierInstance = new Identifier();
         SoundRecorder = new Recorder();
         SoundRecorder.initializeRecorder();
+
+
 
         //initializing intent
         nextActivity = new Intent(this,MainActivity.class);
@@ -81,6 +89,17 @@ public class RegisterActivity extends Activity {
         } catch (AlizeException e) {
             Log.i("RegisterActivity","Error in initializing the alize system");
         }
+
+        remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try{
+                    identifierInstance.removeSpeaker(userID.getText().toString());
+                } catch (AlizeException e) {
+                    Toast.makeText(getApplicationContext(), "User Not found", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
         login.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +123,11 @@ public class RegisterActivity extends Activity {
                 }catch (Exception e){
                     Log.i(LogID,"Exception in comparing name list");
                 }
-
+                try {
+                    identifierInstance.removeSpeaker("mowensh");
+                } catch (AlizeException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -117,12 +140,23 @@ public class RegisterActivity extends Activity {
                         ? View.GONE:View.VISIBLE);
                 micIcon.setVisibility((micIcon.getVisibility() == View.VISIBLE)
                         ? View.GONE:View.VISIBLE);
-                micOff.setVisibility((micOff.getVisibility() == View.VISIBLE)
-                        ? View.GONE:View.VISIBLE);
                 register.setVisibility((register.getVisibility() == View.VISIBLE)
                         ? View.GONE:View.VISIBLE);
                 complete.setVisibility((complete.getVisibility() == View.VISIBLE)
                         ? View.GONE:View.VISIBLE);
+                micIcon.setEnabled(true);
+
+                /*try {
+                    identifierInstance.removeSpeaker("mowneshT1");
+                } catch (AlizeException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    identifierInstance.removeSpeaker("madan");
+                } catch (AlizeException e) {
+                    e.printStackTrace();
+                }*/
+
 
             }
         });
@@ -130,17 +164,27 @@ public class RegisterActivity extends Activity {
         micIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String ins = "Hello , This is recoderd for registration process , I am [your_name]"+
-                        " It is nice to use this app."+"I am registering my voice for authenticating process";
-                fillSpeach.setText(ins);
-                instructions.setVisibility((instructions.getVisibility() == View.VISIBLE)
-                        ? View.GONE:View.VISIBLE);
-                fillSpeach.setVisibility((fillSpeach.getVisibility() == View.VISIBLE)
-                        ? View.GONE:View.VISIBLE);
-
-                SoundRecorder.startRecording();
-
-                Toast.makeText(getApplicationContext(),"Started recording Follow the instructions",Toast.LENGTH_SHORT).show();
+                if (userID.getText().toString() == null || userID.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter user ID", Toast.LENGTH_SHORT).show();
+                } else {
+                    String ins = "Hello , This is recoderd for registration process , I am [your_name]" +
+                            " It is nice to use this app." + "I am registering my voice for authenticating process";
+                    fillSpeach.setText(ins);
+                    instructions.setVisibility((instructions.getVisibility() == View.VISIBLE)
+                            ? View.GONE : View.VISIBLE);
+                    fillSpeach.setVisibility((fillSpeach.getVisibility() == View.VISIBLE)
+                            ? View.GONE : View.VISIBLE);
+                    try {
+                        SoundRecorder.startRecording();
+                        micOff.setVisibility((micOff.getVisibility() == View.VISIBLE)
+                                ? View.GONE : View.VISIBLE);
+                        micIcon.setEnabled(false);
+                        micOff.setEnabled(true);
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(), "There is a problem in starting the recorder !!", Toast.LENGTH_SHORT).show();
+                    }
+                    Toast.makeText(getApplicationContext(), "Started recording Follow the instructions", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -165,24 +209,32 @@ public class RegisterActivity extends Activity {
 
                 instructions.setVisibility(View.GONE);
                 recordingData = SoundRecorder.getRecording();
-                try {
-                    identifierInstance.addSpeaker(recordingData,userID.getText().toString());
-                    complete.setVisibility(View.GONE);
-                    micIcon.setVisibility(View.GONE);
-                    micOff.setVisibility(View.GONE);
-                    login.setVisibility(View.VISIBLE);
-                    register.setVisibility(View.VISIBLE);
+                if(userID.getText().toString() == null || userID.getText().toString().equals("")){
+                    Toast.makeText(getApplicationContext(),"Please enter user ID",Toast.LENGTH_SHORT).show();
+                }else {
+                    try {
+                        identifierInstance.addSpeaker(recordingData, userID.getText().toString());
+                        complete.setVisibility(View.GONE);
+                        micIcon.setVisibility(View.GONE);
+                        micOff.setVisibility(View.GONE);
+                        login.setVisibility(View.VISIBLE);
+                        register.setVisibility(View.VISIBLE);
+                        registerText.setVisibility((registerText.getVisibility() == View.VISIBLE)
+                                ? View.GONE:View.VISIBLE);
 
-                } catch (AlizeException e) {
-                    Log.i(LogID,"unable to add the username");
-                } catch (IdAlreadyExistsException e) {
-                    Log.i(LogID,"Error in creating user user already exist");
-                    Toast.makeText(getApplicationContext(),"User already exist",Toast.LENGTH_SHORT).show();
-                    complete.setVisibility(View.GONE);
-                    micIcon.setVisibility(View.GONE);
-                    micOff.setVisibility(View.GONE);
-                    login.setVisibility(View.VISIBLE);
-                    register.setVisibility(View.VISIBLE);
+                    } catch (AlizeException e) {
+                        Log.i(LogID, "unable to add the username");
+                    } catch (IdAlreadyExistsException e) {
+                        Log.i(LogID, "Error in creating user user already exist");
+                        Toast.makeText(getApplicationContext(), "User already exist", Toast.LENGTH_SHORT).show();
+                        complete.setVisibility(View.GONE);
+                        micIcon.setVisibility(View.GONE);
+                        micOff.setVisibility(View.GONE);
+                        login.setVisibility(View.VISIBLE);
+                        register.setVisibility(View.VISIBLE);
+                        registerText.setVisibility((registerText.getVisibility() == View.VISIBLE)
+                                ? View.GONE:View.VISIBLE);
+                    }
                 }
 
             }

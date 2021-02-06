@@ -6,6 +6,7 @@ public class DataModel {
 
     private File audio;
     private static boolean verification = false;
+    private static String USERID;
 
     DataModel(){
 
@@ -26,4 +27,8 @@ public class DataModel {
     public boolean getVerification(){
         return verification;
     }
+
+    public void setUSERID(String user){this.USERID = user;}
+
+    public String getUSERID(){return USERID;}
 }

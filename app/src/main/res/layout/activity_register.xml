@@ -49,6 +49,8 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_gravity="center"
+        android:inputType="text"
+        android:maxLines="1"
         android:background="@drawable/customedittext"
         android:hint="Enter UserID"
         />
@@ -83,6 +85,7 @@
             android:layout_marginLeft="70dp"
             android:layout_marginTop="30dp"
             android:visibility="gone"
+
             android:background="@drawable/customround"/>
 
 
@@ -142,6 +145,21 @@
         android:background="@drawable/custombtn1"
         android:text="Register"
         />
+
+    <Button
+        android:id="@+id/RemoveUser"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:textColor="#ffff"
+        android:background="@drawable/custombtn1"
+        android:text="Remove"
+        />
+
+
 
     <Button
         android:id="@+id/CompleteRegistration"

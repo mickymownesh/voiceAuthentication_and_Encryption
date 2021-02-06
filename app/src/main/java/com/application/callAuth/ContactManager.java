@@ -20,6 +20,7 @@ public class ContactManager {
 	private boolean LISTEN = true;
 	private HashMap<String, InetAddress> contacts;
 	private InetAddress broadcastIP;
+	private DataModel db = new DataModel();
 	
 	public ContactManager(String name, InetAddress broadcastIP) {
 		
@@ -190,8 +191,14 @@ public class ContactManager {
 					String action = data.substring(0, 4);
 					if(action.equals("ADD:")) {
 						// Add notification received. Attempt to add contact
-						Log.i(LOG_TAG, "Listener received ADD request");
-						addContact(data.substring(4, data.length()), packet.getAddress());
+						String name = data.substring(4, data.length());
+						if(name.equals(db.getUSERID())){
+							Log.i(LOG_TAG, "My name just got detected");
+						}else {
+							Log.i(LOG_TAG, "Listener received ADD request");
+							addContact(data.substring(4, data.length()), packet.getAddress());
+							Log.i("ContactMAnager", "Contact name :  " + data.substring(4, data.length()));
+						}
 					}
 					else if(action.equals("BYE:")) {
 						// Bye notification received. Attempt to remove contact

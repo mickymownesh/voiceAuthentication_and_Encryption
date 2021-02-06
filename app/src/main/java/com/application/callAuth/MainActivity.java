@@ -70,6 +70,7 @@ public class MainActivity extends Activity {
 
 		//initiating the Database
 		db = new DataModel();
+		db.setUSERID(UserId);
 
 		//fireBaseSupport obj = new fireBaseSupport();
 
@@ -101,6 +102,7 @@ public class MainActivity extends Activity {
 				scrollView.setVisibility(View.VISIBLE);
 				
 				contactManager = new ContactManager(displayName, getBroadcastIp());
+				//startActivity(verificationIntent);
 				startCallListener();
 			}
 		});
@@ -119,6 +121,7 @@ public class MainActivity extends Activity {
 		
 		// CALL BUTTON
 		// Attempts to initiate an audio chat session with the selected device
+
 		final Button btnCall = (Button) findViewById(R.id.buttonCall);
 		btnCall.setOnClickListener(new OnClickListener() {
 			
@@ -143,11 +146,11 @@ public class MainActivity extends Activity {
 					return;
 				}
 
-				startActivity(verificationIntent);
+
 				Log.i("Verification","Verification id is : "+getIntent().getStringExtra("Verification"));
 				//Toast.makeText(getApplicationContext(),"verification id : "+getIntent().getStringExtra("Verification"),Toast.LENGTH_LONG).show();
 				// Collect details about the selected contact
-				if(db.getVerification()) {
+				if(true) {
 					RadioButton radioButton = (RadioButton) findViewById(selectedButton);
 					String contact = radioButton.getText().toString();
 					InetAddress ip = contactManager.getContacts().get(contact);
@@ -164,9 +167,12 @@ public class MainActivity extends Activity {
 				}else{
 					Toast.makeText(getApplicationContext(),"Verification Failed could not make call",Toast.LENGTH_LONG).show();
 				}
+
 			}
 		});
 	}
+
+
 	
 	private void updateContactList() {
 		// Create a copy of the HashMap used by the ContactManager

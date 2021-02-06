@@ -29,6 +29,7 @@ public class MakeCallActivity extends Activity {
 	private boolean LISTEN = true;
 	private boolean IN_CALL = false;
 	private AudioCall call;
+	private TextView auth;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,15 +40,20 @@ public class MakeCallActivity extends Activity {
 		Log.i(LOG_TAG, "MakeCallActivity started!");
 		
 		Intent intent = getIntent();
+		Intent verification = new Intent(this,VerificationActivity.class);
 		displayName = intent.getStringExtra(MainActivity.EXTRA_DISPLAYNAME);
 		contactName = intent.getStringExtra(MainActivity.EXTRA_CONTACT);
 		contactIp = intent.getStringExtra(MainActivity.EXTRA_IP);
+
+		auth = (TextView)findViewById(R.id.mutalAuthTxt);
 		
 		TextView textView = (TextView) findViewById(R.id.textViewCalling);
 		textView.setText("Calling: " + contactName);
-		
-		startListener();
-		makeCall();
+
+		startActivityForResult(verification,2);
+
+
+
 		
 		Button endButton = (Button) findViewById(R.id.buttonEndCall);
 		endButton.setOnClickListener(new OnClickListener() {
@@ -58,6 +64,20 @@ public class MakeCallActivity extends Activity {
 				endCall();
 			}
 		});
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		super.onActivityResult(requestCode, resultCode, data);
+		// check if the request code is same as what is passed  here it is 2
+		if(requestCode==2 && resultCode == 1)
+		{
+			startListener();
+			makeCall();
+		}else {
+			finish();
+		}
 	}
 
 	
@@ -103,6 +123,7 @@ public class MakeCallActivity extends Activity {
 							String action = data.substring(0, 4);
 							if(action.equals("ACC:")) {
 								// Accept notification received. Start call
+								auth.setVisibility(View.INVISIBLE);
 								call = new AudioCall(packet.getAddress());
 								call.startCall();
 								IN_CALL = true;

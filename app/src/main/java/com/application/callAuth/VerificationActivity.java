@@ -68,6 +68,10 @@ public class VerificationActivity extends Activity {
                 micOffIcon.setVisibility(View.VISIBLE);
                 fillSpeech.setVisibility(View.VISIBLE);
 
+                try{
+                    SoundRecorder.initializeRecorder();
+                }catch (Exception e){}
+
                 SoundRecorder.startRecording();
 
                 Toast.makeText(getApplicationContext(),"Started recording Follow the instructions",Toast.LENGTH_SHORT).show();
@@ -88,13 +92,14 @@ public class VerificationActivity extends Activity {
             public void onClick(View v) {
                 SimpleSpkDetSystem.SpkRecResult output = null;
                 try {
-                    output = identifierInstance.identifySpeaker(recordingData);
+                    output = identifierInstance.VerifySpeaker(recordingData,db.getUSERID());
                 } catch (AlizeException e) {
                     Log.i("ACT", "error in speker result");
                 }
                 if (output != null) {
                     ins.setText("Your verification score : " + String.valueOf(output.score));
-                } else {
+                }
+                else {
                     Log.i("ACT", "output is null");
                 }
 
@@ -109,13 +114,25 @@ public class VerificationActivity extends Activity {
 
 
                 try{
-                    if(Arrays.asList(name).contains(UserID) ){
+                    if(output.match || output.score >50.0f ){
                         Toast.makeText(getApplicationContext(), "Verification Sucessfull", Toast.LENGTH_SHORT).show();
+                        Log.i("VerificationActivyty ","db user id :"+db.getUSERID());
+                        Log.i("VerificationActivyty ","speaker list :"+identifierInstance.getSpeakerList());
+                        Log.i("VerificationActivyty ","Speaker name :"+output.speakerId);
+                        Log.i("VerificationActivyty ","Myscore :"+output.score);
+                        Log.i("VerificationActivyty ","Match validation :"+output.match);
                         db.setVerification(true);
+                        setResult(1);
                         finish();
 
                     }else
-                        Toast.makeText(getApplicationContext(),"User Not found",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),"Voice not verified",Toast.LENGTH_LONG).show();
+                        Log.i("VerificationActivyty ","In elseSpeaker name :"+output.speakerId);
+                        Log.i("VerificationActivyty ","in else Myscore :"+output.score);
+                        Log.i("VerificationActivyty ","in else Match validation :"+output.match);
+                        Log.i("VerificationActivyty ","in else speaker list :"+identifierInstance.getSpeakerList());
+                        setResult(2);
+                        finish();
                 }catch (Exception e){
                     Log.i("verificationActivity","Exception in comparing name list");
                 }
@@ -127,6 +144,7 @@ public class VerificationActivity extends Activity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(), "Verification not Sucessfull", Toast.LENGTH_SHORT).show();
                 db.setVerification(false);
+                SoundRecorder.stopRecording();
                 finish();
             }
         });

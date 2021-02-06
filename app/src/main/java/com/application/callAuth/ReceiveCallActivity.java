@@ -27,6 +27,7 @@ public class ReceiveCallActivity extends Activity {
 	private boolean LISTEN = true;
 	private boolean IN_CALL = false;
 	private AudioCall call;
+	private Intent verification;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,8 @@ public class ReceiveCallActivity extends Activity {
 		Intent intent = getIntent();
 		contactName = intent.getStringExtra(MainActivity.EXTRA_CONTACT);
 		contactIp = intent.getStringExtra(MainActivity.EXTRA_IP);
+
+		verification = new Intent(this,VerificationActivity.class);
 		
 		TextView textView = (TextView) findViewById(R.id.textViewIncomingCall);
 		textView.setText("Incoming call: " + contactName);
@@ -45,6 +48,10 @@ public class ReceiveCallActivity extends Activity {
 		endButton.setVisibility(View.INVISIBLE);
 		
 		startListener();
+		//sendMessage("NOP:");
+
+		startActivityForResult(verification,3);
+
 		
 		// ACCEPT BUTTON
 		Button acceptButton = (Button) findViewById(R.id.buttonAccept);
@@ -102,6 +109,21 @@ public class ReceiveCallActivity extends Activity {
 				endCall();
 			}
 		});
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		super.onActivityResult(requestCode, resultCode, data);
+		// check if the request code is same as what is passed  here it is 2
+		if(requestCode==3 && resultCode == 1)
+		{
+
+		}else {
+			endCall();
+			finish();
+
+		}
 	}
 	
 	private void endCall() {
