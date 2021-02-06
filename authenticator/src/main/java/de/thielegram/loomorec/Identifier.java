@@ -12,6 +12,7 @@ import AlizeSpkRec.IdAlreadyExistsException;
 import AlizeSpkRec.SimpleSpkDetSystem;
 import AlizeSpkRec.SimpleSpkDetSystem.SpkRecResult;
 
+
 public class Identifier {
     private static final Identifier sInstance = new Identifier();
 
@@ -117,6 +118,17 @@ public class Identifier {
 
         alizeSystem.addAudio(voiceSample);
         SpkRecResult output = alizeSystem.identifySpeaker();
+
+        alizeSystem.resetAudio();
+        alizeSystem.resetFeatures();
+
+        return output;
+    }
+
+    public SpkRecResult VerifySpeaker(short[] voiceSample,String id) throws AlizeException {
+
+        alizeSystem.addAudio(voiceSample);
+        SpkRecResult output = alizeSystem.verifySpeaker(id);
 
         alizeSystem.resetAudio();
         alizeSystem.resetFeatures();

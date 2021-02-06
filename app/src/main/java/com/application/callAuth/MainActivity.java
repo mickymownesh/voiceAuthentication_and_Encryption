@@ -6,10 +6,12 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import com.application.callAuth.DataModel;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -25,6 +27,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
@@ -36,11 +39,14 @@ public class MainActivity extends Activity {
 	private boolean STARTED = false;
 	private boolean IN_CALL = false;
 	private boolean LISTEN = false;
-	
+	private Intent previousIntent;
 	public final static String EXTRA_CONTACT = "hw.dt83.udpchat.CONTACT";
 	public final static String EXTRA_IP = "hw.dt83.udpchat.IP";
 	public final static String EXTRA_DISPLAYNAME = "hw.dt83.udpchat.DISPLAYNAME";
-	
+	private Intent verificationIntent;
+	public static Context mainApplication;
+	private DataModel db;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		
@@ -48,12 +54,23 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		Log.i(LOG_TAG, "UDPChat started");
+
+		previousIntent = getIntent();
+		verificationIntent = new Intent(getApplicationContext(),VerificationActivity.class);
 		
 		// START BUTTON
 		// Pressing this buttons initiates the main functionality
 		final Button btnStart = (Button) findViewById(R.id.buttonStart);
 
+		String UserId = previousIntent.getStringExtra("UserID");
+		TextView displayNameText = (TextView)findViewById(R.id.editTextDisplayName);
+		displayNameText.setVisibility(View.VISIBLE);
+		displayNameText.setText(UserId);
+		displayName = UserId;
+
 		//initiating the Database
+		db = new DataModel();
+		db.setUSERID(UserId);
 
 		//fireBaseSupport obj = new fireBaseSupport();
 
@@ -64,11 +81,12 @@ public class MainActivity extends Activity {
 				
 				Log.i(LOG_TAG, "Start button pressed");
 				STARTED = true;
+
+				//TextView displayNameText = (TextView)findViewById(R.id.editTextDisplayName)
+				//EditText displayNameText = (EditText) findViewById(R.id.editTextDisplayName);
+				//displayName = displayNameText.getText().toString();
 				
-				EditText displayNameText = (EditText) findViewById(R.id.editTextDisplayName);
-				displayName = displayNameText.getText().toString();
-				
-				displayNameText.setEnabled(false);
+				//displayNameText.setEnabled(false);
 				btnStart.setEnabled(false);
 				
 				TextView text = (TextView) findViewById(R.id.textViewSelectContact);
@@ -84,6 +102,7 @@ public class MainActivity extends Activity {
 				scrollView.setVisibility(View.VISIBLE);
 				
 				contactManager = new ContactManager(displayName, getBroadcastIp());
+				//startActivity(verificationIntent);
 				startCallListener();
 			}
 		});
@@ -102,6 +121,7 @@ public class MainActivity extends Activity {
 		
 		// CALL BUTTON
 		// Attempts to initiate an audio chat session with the selected device
+
 		final Button btnCall = (Button) findViewById(R.id.buttonCall);
 		btnCall.setOnClickListener(new OnClickListener() {
 			
@@ -117,31 +137,42 @@ public class MainActivity extends Activity {
 					alert.setTitle("Oops");
 					alert.setMessage("You must select a contact first");
 					alert.setButton(-1, "OK", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-					 
-					       alert.dismiss();					 
+						public void onClick(DialogInterface dialog, int which) {
+
+							alert.dismiss();
 						}
 					});
 					alert.show();
 					return;
 				}
+
+
+				Log.i("Verification","Verification id is : "+getIntent().getStringExtra("Verification"));
+				//Toast.makeText(getApplicationContext(),"verification id : "+getIntent().getStringExtra("Verification"),Toast.LENGTH_LONG).show();
 				// Collect details about the selected contact
-				RadioButton radioButton = (RadioButton) findViewById(selectedButton);
-				String contact = radioButton.getText().toString();
-				InetAddress ip = contactManager.getContacts().get(contact);
-				IN_CALL = true;
-				
-				// Send this information to the MakeCallActivity and start that activity
-				Intent intent = new Intent(MainActivity.this, MakeCallActivity.class);
-				intent.putExtra(EXTRA_CONTACT, contact);
-				String address = ip.toString();
-				address = address.substring(1, address.length());
-				intent.putExtra(EXTRA_IP, address);
-				intent.putExtra(EXTRA_DISPLAYNAME, displayName);
-				startActivity(intent);
+				if(true) {
+					RadioButton radioButton = (RadioButton) findViewById(selectedButton);
+					String contact = radioButton.getText().toString();
+					InetAddress ip = contactManager.getContacts().get(contact);
+					IN_CALL = true;
+
+					// Send this information to the MakeCallActivity and start that activity
+					Intent intent = new Intent(MainActivity.this, MakeCallActivity.class);
+					intent.putExtra(EXTRA_CONTACT, contact);
+					String address = ip.toString();
+					address = address.substring(1, address.length());
+					intent.putExtra(EXTRA_IP, address);
+					intent.putExtra(EXTRA_DISPLAYNAME, displayName);
+					startActivity(intent);
+				}else{
+					Toast.makeText(getApplicationContext(),"Verification Failed could not make call",Toast.LENGTH_LONG).show();
+				}
+
 			}
 		});
 	}
+
+
 	
 	private void updateContactList() {
 		// Create a copy of the HashMap used by the ContactManager

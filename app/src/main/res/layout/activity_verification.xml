@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#ffff"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
+        android:layout_marginLeft="0dp"
+        android:layout_gravity="center"
+        android:textSize="25dp"
+        android:textColor="@color/RegisterBtn"
+        android:text="VERIFYING USER"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="20dp"
+        android:text="Please press record button"
+        android:textSize="15dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/VerificationMicLayout"
+        android:layout_marginTop="60dp"
+        >
+
+        <TextView
+            android:id="@+id/VerificationMicIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:paddingTop="2dp"
+            android:drawableLeft="@drawable/ic_mic"
+            android:gravity="center"
+            android:layout_marginLeft="110dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/customround"
+
+            />
+
+        <TextView
+            android:id="@+id/VerficationMicOffIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:paddingTop="2dp"
+            android:drawableLeft="@drawable/ic__mic_off"
+            android:gravity="center"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="30dp"
+
+            android:background="@drawable/customround"/>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/VerificationSpeaktheF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="FOR BETTER VERIFICATION"
+        android:textColor="@color/colorAccent"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:padding="10dp"
+
+        />
+
+    <TextView
+        android:id="@+id/VerficationFillSpeech"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:textColor="@color/RegisterBtn"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:padding="10dp"
+
+
+        />
+
+
+    <Button
+        android:id="@+id/VerificationVerifybtn"
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/custombtn1"
+        android:layout_gravity="center"
+        android:text="VERIFY"
+        android:textColor="#ffff"/>
+
+    <Button
+        android:id="@+id/VerificationCancelbtn"
+        android:layout_width="170dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/custombtn1"
+        android:layout_gravity="center"
+        android:text="CANCEL"
+        android:textColor="#ffff"/>
+
+</LinearLayout>

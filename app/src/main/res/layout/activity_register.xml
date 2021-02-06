@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="#ffff"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_call_icon"
+        android:drawableRight="@drawable/ic_android_icon"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="110dp"
+        android:layout_marginRight="110dp"
+        android:drawablePadding="3dp"
+        android:paddingVertical="5dp"
+        android:gravity="center"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Next Gen Calling App"
+        android:textSize="23dp"
+        android:layout_gravity="center"
+
+        />
+    <TextView
+        android:id="@+id/RegisterTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="REGISTER"
+        android:paddingTop="20dp"
+        android:layout_marginLeft="125dp"
+        android:layout_marginRight="50dp"
+        android:gravity="center"
+        android:textSize="25dp"
+        android:visibility="gone"
+
+        />
+
+
+    <EditText
+        android:id="@+id/UserIDEdit"
+        android:layout_width="230dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_gravity="center"
+        android:inputType="text"
+        android:maxLines="1"
+        android:background="@drawable/customedittext"
+        android:hint="Enter UserID"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/MicLayout"
+        >
+
+        <TextView
+            android:id="@+id/MicIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:paddingTop="2dp"
+            android:drawableLeft="@drawable/ic_mic"
+            android:gravity="center"
+            android:layout_marginLeft="110dp"
+            android:layout_marginTop="30dp"
+            android:visibility="gone"
+            android:background="@drawable/customround"
+
+            />
+
+        <TextView
+            android:id="@+id/MicOffIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:paddingTop="2dp"
+            android:drawableLeft="@drawable/ic__mic_off"
+            android:gravity="center"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="30dp"
+            android:visibility="gone"
+
+            android:background="@drawable/customround"/>
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/SpeaktheF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="SPEAK THE FOLLOWING"
+        android:textColor="@color/colorAccent"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:visibility="gone"
+        />
+
+        <TextView
+            android:id="@+id/FillSpeech"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:textColor="@color/RegisterBtn"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:padding="10dp"
+            android:visibility="gone"
+
+            />
+
+
+
+
+    <Button
+        android:id="@+id/LoginButton"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:text="Login"
+        android:textColor="#ffff"
+        android:background="@drawable/custombtn1"
+        />
+
+    <Button
+        android:id="@+id/RegisterButton"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:textColor="#ffff"
+        android:background="@drawable/custombtn1"
+        android:text="Register"
+        />
+
+    <Button
+        android:id="@+id/RemoveUser"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:textColor="#ffff"
+        android:background="@drawable/custombtn1"
+        android:text="Remove"
+        />
+
+
+
+    <Button
+        android:id="@+id/CompleteRegistration"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:textColor="#ffff"
+        android:background="@drawable/custombtn1"
+        android:text="Register"
+        android:visibility="gone"
+        />
+
+
+
+</LinearLayout>
